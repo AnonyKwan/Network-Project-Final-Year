@@ -1,0 +1,108 @@
+hostname Router-Auckland
+
+int g0/0
+ip address 202.14.63.132 255.255.255.0
+no shut
+int g0/1
+ip addr 172.17.0.1 255.255.255.0
+no shut
+
+ip route 0.0.0.0 0.0.0.0 g0/0 202.14.63.3
+
+ip dhcp excluded-address 172.17.0.1 172.17.0.19
+ip dhcp pool Auckland-DHCP-1
+network 172.17.0.0 255.255.255.0
+default-router 172.17.0.1
+dns-server 10.10.0.110
+
+enable password cisco12345
+username admin privilege 15 algorithm-type sha256 secret cisco12345
+ip domain-name optimus.com
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+ip ssh time-out 120
+ip ssh authentication-retries 5
+line vty 0 4
+privilege level 15
+exec-timeout 15 0
+transport input ssh
+service password-encryption
+banner motd #UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED!#
+
+aaa new-model
+aaa authentication login default local-case enable
+aaa authorization exec default local
+
+access-list 10 permit 172.17.0.0 0.0.255.255
+ip nat inside source list 10 interface g0/0 overload 
+interface g0/0
+ip nat outside
+interface g0/1
+ip nat inside
+
+interface Tunnel 10
+ip address 10.100.1.2 255.255.255.0
+ip nhrp authentication DMVPN
+ip nhrp map 10.100.1.1 202.14.63.131
+ip nhrp map multicast 202.14.63.131
+ip nhrp network-id 10
+ip nhrp nhs 10.100.1.1
+tunnel source g0/0
+tunnel mode gre multipoint
+
+eigrp
+router eigrp 10
+network 10.100.1.0
+network 172.17.0.0
+no auto-summary
+
+crypto isakmp policy 10
+authentication pre-share 
+encryption aes 256
+group 24
+hash sha512
+
+crypto isakmp key cisco address 0.0.0.0
+crypto ipsec transform-set DMVPN esp-aes 256 esp-sha512-hmac
+crypto ipsec profile DMVPN
+set transform-set DMVPN
+int tunnel 10
+tunnel protection ipsec profile DMVPN
+
+mkdir ipsdir
+crypto key pubkey-chain rsa
+ named-key realm-cisco.pub signature
+  key-string
+   30820122 300D0609 2A864886 F70D0101 01050003 82010F00 3082010A 02820101
+   00C19E93 A8AF124A D6CC7A24 5097A975 206BE3A2 06FBA13F 6F12CB5B 4E441F16
+   17E630D5 C02AC252 912BE27F 37FDD9C8 11FC7AF7 DCDD81D9 43CDABC3 6007D128
+   B199ABCB D34ED0F9 085FADC1 359C189E F30AF10A C0EFB624 7E0764BF 3E53053E
+   5B2146A9 D7A5EDE3 0298AF03 DED7A5B8 9479039D 20F30663 9AC64B93 C0112A35
+   FE3F0C87 89BCB7BB 994AE74C FA9E481D F65875D6 85EAF974 6D9CC8E3 F0B08B85
+   50437722 FFBE85B9 5E4189FF CC189CB9 69C46F9C A84DFBA5 7A0AF99E AD768C36
+   006CF498 079F88F8 A3B3FB1F 9FB7B3CB 5539E1D1 9693CCBB 551F78D2 892356AE
+   2F56D826 8918EF3C 80CA4F4D 87BFCA3B BFF668E9 689782A5 CF31CB6E B4B094D3
+   F3020301 0001
+ quit
+ exit
+ exit 
+
+ip ips name IPS
+ip ips config location flash:ipsdir
+ip http server
+ip ips notify sdee
+ip ips notify log
+service	timestamps log datetime msec
+
+ip ips signature-category 
+category all
+retired true
+exit
+category ios_ips basic
+retired false
+exit
+exit
+
+interface g0/0
+ip ips IPS in
+copy flash:IOS-S983-CLI.pkg idconf

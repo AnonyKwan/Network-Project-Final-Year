@@ -1,0 +1,17 @@
+
+regex blockex1 "4chan\.org"
+regex blockex2 "google\.com"
+class-map type inspect http match-any block-url-class
+
+ match request header host regex blockex1
+match request header host regex blockex2
+
+policy-map type inspect http block-url-policy
+ parameters
+ class block-url-class
+  drop-connection log
+policy-map global_policy
+ class inspection_default
+  inspect http block-url-policy
+
+service-policy global_policy global

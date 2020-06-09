@@ -1,0 +1,45 @@
+
+ access-list GENERAL extended permit tcp any 10.10.0.0 255.255.0.0 eq http 
+ access-list GENERAL extended permit tcp any 10.10.0.0 255.255.0.0 eq https
+ access-list GENERAL extended permit tcp any 10.10.0.0 255.255.0.0 eq 445
+ access-list GENERAL extended permit tcp any 10.10.0.0 255.255.0.0 eq 80
+ access-list GENERAL extended permit tcp any 10.10.0.0 255.255.0.0 eq 53
+ access-list GENERAL extended permit udp any 10.10.0.0 255.255.0.0 eq 53
+ access-list GENERAL extended permit tcp any 10.10.0.0 255.255.0.0 eq 135
+ access-list GENERAL extended permit tcp any 10.10.0.0 255.255.0.0 eq 123
+ access-list GENERAL extended permit tcp any 10.10.0.0 255.255.0.0 eq 139
+ access-list GENERAL extended permit udp any 10.10.0.0 255.255.0.0 eq 137
+ access-list GENERAL extended permit udp any 10.10.0.0 255.255.0.0 eq 138
+
+ access-list GENERAL extended permit tcp any host 10.10.0.110 eq 514
+
+ access-list GENERAL extended permit tcp any any eq 63430
+ access-list GENERAL extended permit tcp any any eq 5000
+ access-list GENERAL extended permit udp any any eq 63430
+ access-list GENERAL extended permit udp any any eq 1900
+
+ access-list GENERAL extended permit icmp any any 
+ access-list GENERAL extended permit icmp any any echo-reply
+ access-list GENERAL extended permit tcp any any eq 53
+ access-list GENERAL extended permit udp any any eq 53
+ access-list GENERAL extended permit udp any any eq 547
+ access-list GENERAL extended permit udp any any eq 67
+ access-list GENERAL extended permit udp any any eq 68
+
+ access-list GENERAL extended permit udp any any eq 305
+ access-list GENERAL extended permit udp any any eq 300
+ access-list GENERAL extended permit udp any any eq 317
+ access-list GENERAL extended permit tcp any any eq 636
+ access-list GENERAL extended permit tcp any any eq 3269
+ access-list GENERAL extended permit tcp any any eq 3268
+ access-list GENERAL extended permit tcp any any eq 389
+ access-list GENERAL extended permit udp any any eq 389
+ access-list GENERAL extended permit tcp any any eq 135
+ access-list GENERAL extended permit tcp any any eq 445
+ access-list GENERAL extended permit tcp any any eq 138
+ access-list GENERAL extended permit tcp any any eq 139
+ access-list GENERAL extended permit tcp any any eq 137
+
+
+ access-group GENERAL in interface OUTSIDE
+

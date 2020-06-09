@@ -1,0 +1,25 @@
+hostname Hamilton-Server-Master
+
+int range g0/1 - 2
+channel-group 10 mode passive 
+
+spanning-tree mode rapid-pvst  
+
+enable password cisco12345
+username admin privilege 15 algorithm-type sha256 secret cisco12345
+ip domain-name optimus.com
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+ip ssh time-out 120
+ip ssh authentication-retries 5
+line vty 0 4
+privilege level 15
+exec-timeout 15 0
+transport input ssh
+service password-encryption
+banner motd #UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED!#
+
+aaa new-model
+aaa authentication login default local-case enable
+aaa authorization exec default local
+

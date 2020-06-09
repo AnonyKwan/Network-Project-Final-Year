@@ -1,0 +1,13 @@
+hostname ASA-Hamilton-Backup
+
+failover 
+failover lan unit secondary
+failover lan interface FAILOVER g0/1
+failover link STATEFULL g0/2
+failover interface ip FAILOVER 192.168.1.1 255.255.255.252 standby 192.168.1.2
+failover interface ip STATEFULL 192.168.2.1 255.255.255.252 standby 192.168.2.2
+
+int g0/1
+no shut
+int g0/2    
+no shut

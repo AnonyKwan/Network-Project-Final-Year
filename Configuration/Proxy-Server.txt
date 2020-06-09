@@ -1,0 +1,42 @@
+Hostname Proxy-Server
+
+int g0/0
+nameif OUTSIDE
+ip addr 202.14.62.100 255.255.255.0
+no shut
+
+int g0/1
+nameif INSIDE
+ip addr 172.16.0.5 255.255.255.0
+no shut
+
+enable password cisco12345
+username admin password cisco12345 privilege 15
+aaa authentication enable console LOCAL
+password encryption aes
+aaa authentication ssh console LOCAL
+crypto key generate rsa general-keys modulus 2048
+ssh 10.10.0.0 255.255.0.0 INSIDE
+ssh version 2
+
+policy-map global_policy 
+class inspection_default 
+inspect icmp
+
+access-list ICMP extended permit icmp any any
+access-list ICMP extended permit icmp any any echo-reply
+access-group ICMP in interface outside
+
+router eigrp 10
+network 172.16.0.0
+network 10.20.0.0
+no auto-summary 
+
+
+http server enable 
+http 10.10.0.0 255.255.0.0 INSIDE
+
+route OUTSIDE 0.0.0.0 0.0.0.0 202.14.62.3 
+
+
+

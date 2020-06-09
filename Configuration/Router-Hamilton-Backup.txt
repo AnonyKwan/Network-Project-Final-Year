@@ -1,0 +1,42 @@
+hostname Router-Hamilton-Backup
+
+int g0/0
+ip addr 10.1.2.2 255.255.255.0
+no shut
+
+int g0/1
+ip addr 172.16.0.2 255.255.255.0
+ip helper-address 10.1.2.1
+no shut
+
+ip route 0.0.0.0 0.0.0.0 g0/0 10.1.2.1
+ip route 10.10.0.0 255.255.255.0 172.16.0.3
+
+enable password cisco12345
+username admin privilege 15 algorithm-type sha256 secret cisco12345
+ip domain-name optimus.com
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+ip ssh time-out 120
+ip ssh authentication-retries 5
+line vty 0 4
+privilege level 15
+exec-timeout 15 0
+transport input ssh
+service password-encryption
+banner motd #UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED!#
+
+aaa new-model
+aaa authentication login default local-case enable
+aaa authorization exec default local
+
+router eigrp 10
+network 10.1.0.0
+network 172.16.0.0
+redistribute static 
+passive-interface g0/1
+no auto-summary
+
+int g0/1
+standby version 2
+standby 1 ip 172.16.0.19
