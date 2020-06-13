@@ -2,7 +2,38 @@
 
 ![alt text](https://github.com/AnonyKwan/Network-Project-Final-Year-/blob/master/Topology.png?raw=true "NetWork Topology")
 
-# Server Config
+# Routing Side
+__Edge_Routers__
+* Intrusion Prevention System (IPS)
+* Dynamic Multipoint VPN (DMVPN)
+* EIGRP Routing Protocol Over DMVPN
+* EIGRP to Local Area Network (Hamilton Only)
+* DHCP
+* Local AAA
+* Port Address Translation (PAT)
+
+
+__Inside_Routers_Hamilton__
+*  Hot Standby Router Protocol (HSRP) 
+* EIGRP
+* Local AAA
+
+__Switches__
+* Ethernet Channel (Link Aggregation)
+* Local AAA
+* Protected Port (LAN Switch Only)
+
+__ASAv__
+* EIGRP
+* Failover
+* Tons of ACL
+* URL Filtering (NOT WORKED ON **HTTPS** TRAFFIC / Need Firepower Engine)
+
+__Proxy Server(ASAv)__
+* SSL-VPN (AnyConnect)
+
+
+# Server Side
 
 __Windowsn__
 * Active Directory
@@ -23,6 +54,8 @@ __Linux Cluster (SLE15)__
 
 # Recommendations
 ~~~
+Implement Server-Based AAA (TACACS+) rater than Local AAA
+
  ASAv ---> FortiGate
 
  VPN Proxy Server ---> Linux VM
