@@ -23,6 +23,8 @@ __Switches__
 * Local AAA
 * Protected Port (LAN Switch Only)
 
+# Firewall Side
+
 __ASAv__
 * EIGRP
 * Failover
