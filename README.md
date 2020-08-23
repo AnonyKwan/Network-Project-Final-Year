@@ -2,6 +2,8 @@
 
 ![alt text](https://github.com/AnonyKwan/Network-Project-Final-Year-/blob/master/Topology.png?raw=true "NetWork Topology")
 
+This repo is the backup for the final year project, everything here only for demo purpose.
+
 # Routing Side
 __Edge_Routers__
 * Intrusion Prevention System (IPS)
@@ -62,7 +64,7 @@ Implement Server-Based AAA (TACACS+) rater than Local AAA
 
  VPN Proxy Server ---> Linux VM
  
- MOVE THE SERVER TO CLOUD
+ MOVE THE SERVERS TO CLOUD
 ~~~
 
 
