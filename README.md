@@ -61,6 +61,8 @@ Implement Server-Based AAA (TACACS+) rater than Local AAA
  ASAv ---> FortiGate
 
  VPN Proxy Server ---> Linux VM
+ 
+ MOVE THE SERVER TO CLOUD
 ~~~
 
 
